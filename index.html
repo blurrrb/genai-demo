@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheapest Prices - Compare & Save</title>
+    <style>
+        :root {
+            --primary-color: #f39c12;
+            --secondary-color: #e67e22;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .primary-button {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .secondary-button {
+            background-color: transparent;
+            color: var(--text-color);
+        }
+        
+        .hero {
+            width: 100%;
+            height: 220px;
+            background-image: url('https://via.placeholder.com/1200x220');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 2rem;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-bar {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px 0 0 4px;
+        }
+        
+        .search-button {
+            padding: 0.75rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .service-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .service-tab {
+            padding: 0.5rem 1rem;
+            background-color: var(--light-gray);
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .service-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .dropdown {
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+        
+        .dropdown-header {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .dropdown-content {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .item {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+        
+        .item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-info {
+            flex: 1;
+        }
+        
+        .item-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .item-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .item-price {
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        
+        .item-image {
+            width: 180px;
+            height: 120px;
+            margin-left: 1rem;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+        
+        .add-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .cart {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cart-title {
+            font-weight: bold;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cart-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .quantity-button {
+            width: 25px;
+            height: 25px;
+            background-color: var(--light-gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .cart-summary {
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pay-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: var(--light-gray);
+            padding: 2rem 5%;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            margin-bottom: 1rem;
+            min-width: 200px;
+        }
+        
+        .footer-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .cart {
+                position: static;
+                transform: none;
+                width: 100%;
+                margin-top: 2rem;
+            }
+            
+            .item {
+                flex-direction: column;
+            }
+            
+            .item-image {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">
+            <div>Cheapest</div>
+            <div>Prices</div>
+        </a>
+        <div class="auth-buttons">
+            <button class="secondary-button">Sign in</button>
+            <button class="primary-button">Sign up</button>
+        </div>
+    </header>
+
+    <div class="hero" style="background-image: url('https://via.placeholder.com/1200x220/87CEEB/ffffff?text=Compare+Prices+%26+Save')"></div>
+
+    <main>
+        <h1>Best Deals</h1>
+        
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Delivery address">
+            <button class="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="service-tabs">
+            <div class="service-tab active">Blinkit</div>
+            <div class="service-tab">Swiggy Instamart</div>
+            <div class="service-tab">Zepto</div>
+            <div class="service-tab">Checkout</div>
+        </div>
+        
+        <div class="dropdown">
+            <div class="dropdown-header">
+                <span>Select Store</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+            </div>
+            <div class="dropdown-content" style="display: none;">
+                <div>Store content here</div>
+            </div>
+        </div>
+        
+        <div class="items-list">
+            <div class="item">
+                <div class="item-info">
+                    <div class="item-title">Artichoke Sandwich</div>
+                    <div class="item-description">Fresh artichoke with spinach, cheddar, and mushrooms.</div>
+                    <div class="item-price">Lowest</div>
+                    <button class="add-button">Add</button>
+                </div>
+                <img src="https://via.placeholder.com/180x120/8BC34A/ffffff?text=Artichoke+Sandwich" alt="Artichoke Sandwich" class="item-image">
+            </div>
+            
+            <div class="item">
+                <div class="item-info">
+                    <div class="item-title">Egg Sandwich</div>
+                    <div class="item-description">Mozzarella, fried egg, and olives on tomato base.</div>
+                    <div class="item-price">Affordable</div>
+                    <button class="add-button">Add</button>
+                </div>
+                <img src="https://via.placeholder.com/180x120/FFC107/ffffff?text=Egg+Sandwich" alt="Egg Sandwich" class="item-image">
+            </div>
+            
+            <div class="item">
+                <div class="item-info">
+                    <div class="item-title">Chilli Chicken Sandwich</div>
+                    <div class="item-description">Chicken with rocket and chili peppers in mayo.</div>
+                    <div class="item-price">Budget-friendly</div>
+                    <button class="add-button">Add</button>
+                </div>
+                <img src="https://via.placeholder.com/180x120/FF5722/ffffff?text=Chilli+Chicken" alt="Chilli Chicken Sandwich" class="item-image">
+            </div>
+            
+            <div class="item">
+                <div class="item-info">
+                    <div class="item-title">Turkey Sandwich</div>
+                    <div class="item-description">Pesto, mozzarella, turkey, and tomato.</div>
+                    <div class="item-price">Economical</div>
+                    <button class="add-button">Add</button>
+                </div>
+                <img src="https://via.placeholder.com/180x120/795548/ffffff?text=Turkey+Sandwich" alt="Turkey Sandwich" class="item-image">
+            </div>
+        </div>
+    </main>
+    
+    <div class="cart">
+        <div class="cart-title">Your Cart</div>
+        
+        <div class="cart-item">
+            <div>Artichoke Sandwich</div>
+            <div>Lowest</div>
+        </div>
+        
+        <div class="cart-quantity">
+            <div class="quantity-button">-</div>
+            <div>1</div>
+            <div class="quantity-button">+</div>
+        </div>
+        
+        <div class="cart-summary">
+            <div class="summary-row">
+                <div>Subtotal</div>
+                <div>Total</div>
+            </div>
+            <div class="summary-row">
+                <div>Delivery fee</div>
+                <div>Delivery</div>
+            </div>
+            <div class="summary-row">
+                <div>Total Amount</div>
+                <div>Final cost</div>
+            </div>
+        </div>
+        
+        <div class="pay-button">Pay</div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <a href="#" class="logo">
+                    <div>Cheapest</div>
+                    <div>Prices</div>
+                </a>
+            </div>
+            
+            <div class="footer-section">
+                <div class="footer-title">Connect</div>
+                <ul class="footer-links">
+                    <li
